@@ -131,7 +131,7 @@ export default function WalletPage() {
         <div className="p-6 bg-gray-900/40 rounded-xl border border-violet-500/20 flex flex-col md:flex-row items-center gap-8">
           <div className="bg-white p-2 rounded-xl shadow-lg shadow-violet-500/10">
             <img 
-              src={`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent('upi://pay?pa=9608248903@ybl&pn=IPL PROBO&cu=INR')}`} 
+              src={`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent('upi://pay?pa=9608248903@ybl&pn=INDIA IPL BET&cu=INR')}`} 
               alt="UPI QR Code"
               className="w-32 h-32 md:w-36 md:h-36 block"
             />

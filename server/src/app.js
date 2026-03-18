@@ -81,7 +81,7 @@ app.use(errorHandler);
 const PORT = process.env.PORT || 5000;
 const HOST = '0.0.0.0';
 server.listen(PORT, HOST, () => {
-  console.log(`🚀 Probo Server running on ${HOST}:${PORT}`);
+  console.log(`🚀 India IPL Bet Server running on ${HOST}:${PORT}`);
   console.log(`📡 WebSocket server ready`);
 });
 

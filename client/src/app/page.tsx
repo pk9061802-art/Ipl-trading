@@ -25,26 +25,26 @@ export default function HomePage() {
 
       <div className="relative z-10 text-center max-w-3xl">
         {/* Logo */}
-        <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-violet-500 to-fuchsia-500 flex items-center justify-center mx-auto mb-8 pulse-glow">
-          <span className="text-white font-bold text-3xl">P</span>
+        <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-orange-500 to-yellow-500 flex items-center justify-center mx-auto mb-8 pulse-glow shadow-2xl shadow-orange-500/20">
+          <span className="text-white font-black text-4xl">I</span>
         </div>
 
         <h1 className="text-5xl md:text-7xl font-black text-white mb-6">
           Trade on{' '}
-          <span className="bg-gradient-to-r from-violet-400 to-fuchsia-400 bg-clip-text text-transparent">
-            Predictions
+          <span className="bg-gradient-to-r from-orange-400 via-amber-400 to-yellow-400 bg-clip-text text-transparent">
+            IPL Matches
           </span>
         </h1>
 
         <p className="text-xl text-gray-400 mb-10 max-w-xl mx-auto">
-          Buy YES or NO shares on real-world events. Earn money when your predictions are right. 
+          Buy YES or NO shares on live IPL matches. Earn money when your predictions are right. 
           Prices from ₹0.5 to ₹9.5.
         </p>
 
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
           <Link
             href="/signup"
-            className="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-violet-600 to-fuchsia-600 hover:from-violet-500 hover:to-fuchsia-500 text-white rounded-xl text-lg font-bold transition-all hover:shadow-xl hover:shadow-violet-500/25 hover:-translate-y-0.5"
+            className="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-orange-600 to-yellow-600 hover:from-orange-500 hover:to-yellow-500 text-white rounded-xl text-lg font-bold transition-all hover:shadow-xl hover:shadow-orange-500/25 hover:-translate-y-0.5"
           >
             Start Trading →
           </Link>
