@@ -307,6 +307,42 @@ export default function AdminPage() {
           )}
         </div>
       )}
+
+      {/* Users List */}
+      {tab === 'users' && (
+        <div className="glass rounded-2xl overflow-hidden">
+          <div className="grid grid-cols-12 px-6 py-3 text-xs text-gray-500 font-medium border-b border-gray-700/50">
+            <div className="col-span-1 border-r border-gray-800 text-center">ID</div>
+            <div className="col-span-3 px-4">Username</div>
+            <div className="col-span-3 border-x border-gray-800 text-center">Email</div>
+            <div className="col-span-2 border-r border-gray-800 text-center">Balance</div>
+            <div className="col-span-3 text-right">Actions</div>
+          </div>
+          {users.map((u) => (
+            <div key={u.id} className="grid grid-cols-12 px-6 py-4 items-center border-b border-gray-700/30 last:border-0 hover:bg-gray-800/10">
+              <div className="col-span-1 text-gray-500 text-center text-xs">#{u.id}</div>
+              <div className="col-span-3 px-4">
+                <span className="text-white text-sm font-bold tracking-tight">{u.username}</span>
+                {u.role === 'admin' && <span className="ml-2 text-[8px] font-black text-amber-500 bg-amber-500/10 px-1 py-0.5 rounded border border-amber-500/20 uppercase">Admin</span>}
+              </div>
+              <div className="col-span-3 text-gray-400 text-xs text-center italic">{u.email || '—'}</div>
+              <div className="col-span-2 text-white text-sm font-black text-center">₹{parseFloat(u.balance || 0).toFixed(0)}</div>
+              <div className="col-span-3 text-right">
+                <button
+                  onClick={() => toggleSuspend(u.id)}
+                  className={`text-[10px] font-black px-3 py-1.5 rounded-lg transition-all ${
+                    u.is_suspended 
+                      ? 'bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20' 
+                      : 'bg-red-500/10 text-red-400 hover:bg-red-500/20'
+                  }`}
+                >
+                  {u.is_suspended ? 'UNSUSPEND' : 'SUSPEND'}
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

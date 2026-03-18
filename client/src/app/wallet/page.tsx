@@ -113,17 +113,17 @@ export default function WalletPage() {
         <div className="flex flex-col sm:flex-row gap-4 mb-6">
           <button
             onClick={handleDeposit}
-            disabled={loading}
-            className="flex-1 px-6 py-3 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl font-semibold transition-colors disabled:opacity-50"
+            disabled={loading || !amount || parseFloat(amount) <= 0 || !transactionId}
+            className="flex-1 px-6 py-3 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl font-bold transition-all disabled:opacity-30 disabled:grayscale uppercase tracking-wider text-sm"
           >
-            Deposit Request
+            {loading ? 'Processing...' : 'Deposit Request'}
           </button>
           <button
             onClick={handleWithdraw}
-            disabled={loading}
-            className="flex-1 px-6 py-3 bg-red-600 hover:bg-red-500 text-white rounded-xl font-semibold transition-colors disabled:opacity-50"
+            disabled={loading || !amount || parseFloat(amount) <= 0}
+            className="flex-1 px-6 py-3 bg-red-600 hover:bg-red-500 text-white rounded-xl font-bold transition-all disabled:opacity-30 disabled:grayscale uppercase tracking-wider text-sm"
           >
-            Withdraw Request
+            {loading ? 'Processing...' : 'Withdraw Request'}
           </button>
         </div>
 
@@ -131,9 +131,9 @@ export default function WalletPage() {
         <div className="p-6 bg-gray-900/40 rounded-xl border border-violet-500/20 flex flex-col md:flex-row items-center gap-8">
           <div className="bg-white p-2 rounded-xl shadow-lg shadow-violet-500/10">
             <img 
-              src={`https://chart.googleapis.com/chart?chs=150x150&cht=qr&chl=${encodeURIComponent('upi://pay?pa=9608248903@ybl&pn=IPL PROBO&cu=INR')}`} 
+              src={`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent('upi://pay?pa=9608248903@ybl&pn=IPL PROBO&cu=INR')}`} 
               alt="UPI QR Code"
-              className="w-32 h-32 md:w-36 md:h-36"
+              className="w-32 h-32 md:w-36 md:h-36 block"
             />
           </div>
           
@@ -165,9 +165,12 @@ export default function WalletPage() {
         </div>
 
         {message.text && (
-          <div className={`mt-4 p-3 rounded-lg text-sm ${
-            message.type === 'success' ? 'bg-emerald-500/10 text-emerald-400' : 'bg-red-500/10 text-red-400'
+          <div className={`mt-6 p-4 rounded-xl text-sm font-bold animate-in zoom-in-95 duration-200 border ${
+            message.type === 'success' 
+              ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' 
+              : 'bg-red-500/10 text-red-400 border-red-500/20'
           }`}>
+            <span className="mr-2">{message.type === 'success' ? '✅' : '⚠️'}</span>
             {message.text}
           </div>
         )}

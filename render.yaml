@@ -1,0 +1,20 @@
+services:
+  - type: web
+    name: ipl-probo-api
+    runtime: node
+    region: singapore
+    plan: free
+    rootDir: server
+    buildCommand: npm install
+    startCommand: node src/app.js
+    envVars:
+      - key: PORT
+        value: 5000
+      - key: JWT_SECRET
+        generateValue: true
+      - key: JWT_EXPIRES_IN
+        value: 7d
+      - key: CLIENT_URL
+        value: https://your-app.vercel.app
+      - key: FIREBASE_PROJECT_ID
+        value: alpha123-a1fcf

@@ -12,7 +12,7 @@ interface TradePanelProps {
 
 export default function TradePanel({ marketId, yesPrice, noPrice, onTradeComplete }: TradePanelProps) {
   const [side, setSide] = useState<'YES' | 'NO'>('YES');
-  const [price, setPrice] = useState(side === 'YES' ? yesPrice : noPrice);
+  const [price, setPrice] = useState<number>(side === 'YES' ? (yesPrice || 5.0) : (noPrice || 5.0));
   const [quantity, setQuantity] = useState(1);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -78,8 +78,11 @@ export default function TradePanel({ marketId, yesPrice, noPrice, onTradeComplet
           min={0.5}
           max={9.5}
           step={0.5}
-          value={price}
-          onChange={(e) => setPrice(parseFloat(e.target.value))}
+          value={isNaN(price) ? '' : price}
+          onChange={(e) => {
+            const val = parseFloat(e.target.value);
+            setPrice(isNaN(val) ? 0 : val);
+          }}
           className="w-full bg-gray-900/50 border border-gray-600 rounded-xl px-4 py-3 text-white focus:border-violet-500 focus:outline-none transition-colors"
         />
       </div>
@@ -93,8 +96,11 @@ export default function TradePanel({ marketId, yesPrice, noPrice, onTradeComplet
             type="number"
             min={1}
             max={1000}
-            value={quantity}
-            onChange={(e) => setQuantity(Math.max(1, parseInt(e.target.value) || 1))}
+            value={isNaN(quantity) ? '' : quantity}
+            onChange={(e) => {
+              const val = parseInt(e.target.value);
+              setQuantity(isNaN(val) ? 0 : Math.max(0, val));
+            }}
             className="flex-1 bg-gray-900/50 border border-gray-600 rounded-xl px-4 py-3 text-white text-center focus:border-violet-500 focus:outline-none transition-colors"
           />
           <button onClick={() => setQuantity(quantity + 1)} className="w-10 h-10 rounded-lg bg-gray-700 text-white hover:bg-gray-600 transition-colors">+</button>

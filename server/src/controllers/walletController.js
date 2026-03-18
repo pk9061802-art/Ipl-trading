@@ -29,16 +29,32 @@ const deposit = async (req, res, next) => {
       return res.status(400).json({ error: 'Transaction ID (UTR) is required for verification.' });
     }
 
-    // Create a PENDING transaction instead of updating balance
+    // 1. UPDATE WALLET BALANCE IMMEDIATELY (Instant Deposit)
     await db.query(
-      `INSERT INTO wallet_transactions (user_id, type, amount, balance_after, reference_id, description, status)
-       VALUES ($1, 'deposit', $2, (SELECT balance FROM wallets WHERE user_id = $1), $3, $4, 'pending')`,
-      [req.user.id, amount, transactionId, `UPI Deposit Request: ${transactionId}`]
+      'UPDATE wallets SET balance = balance + $1, updated_at = CURRENT_TIMESTAMP WHERE user_id = $2',
+      [amount, req.user.id]
     );
 
+    // 2. GET UPDATED BALANCE
+    const wallet = await db.query('SELECT balance FROM wallets WHERE user_id = $1', [req.user.id]);
+    const newBalance = parseFloat(wallet.rows[0].balance);
+
+    // 3. LOG AS COMPLETED TRANSACTION
+    await db.query(
+      `INSERT INTO wallet_transactions (user_id, type, amount, balance_after, reference_id, description, status)
+       VALUES ($1, 'deposit', $2, $3, $4, $5, 'completed')`,
+      [req.user.id, amount, newBalance, transactionId, `Instant UPI Deposit: ${transactionId}`]
+    );
+
+    // 4. EMIT REAL-TIME BALANCE UPDATE
+    if (req.io) {
+      req.io.to(`user-${req.user.id}`).emit('balance-update', { balance: newBalance });
+    }
+
     res.json({
-      message: 'Deposit request submitted! Balance will be updated after admin verification of your UPI payment.',
-      status: 'pending'
+      message: `Deposit successful! ₹${amount} added to your wallet instantly.`,
+      balance: newBalance,
+      status: 'completed'
     });
   } catch (err) {
     next(err);

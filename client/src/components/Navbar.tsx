@@ -100,7 +100,6 @@ export default function Navbar() {
                     <div className="absolute right-0 mt-2 w-48 bg-gray-800 border border-gray-700 rounded-xl shadow-2xl py-2 animate-in fade-in slide-in-from-top-2">
                       <div className="px-4 py-2 border-b border-gray-700">
                         <p className="text-white text-sm font-medium">{user.username}</p>
-                        <p className="text-gray-400 text-xs">{user.email}</p>
                       </div>
                       <Link href="/profile" className="block px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-700/50" onClick={() => setMenuOpen(false)}>
                         Profile

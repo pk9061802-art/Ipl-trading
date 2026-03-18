@@ -18,17 +18,30 @@ const adminRoutes = require('./routes/admin');
 const app = express();
 const server = http.createServer(app);
 
-// Allowed origins
+// Allowed origins - supports multiple URLs via comma-separated CLIENT_URL
+const clientUrls = (process.env.CLIENT_URL || 'http://localhost:3000')
+  .split(',')
+  .map(url => url.trim());
+
 const allowedOrigins = [
-  process.env.CLIENT_URL || 'http://localhost:3000',
+  ...clientUrls,
   'http://localhost:3000',
   'http://localhost:3001',
 ];
 
+// Dynamic origin check for Vercel preview deployments
+const corsOriginCheck = (origin, callback) => {
+  if (!origin) return callback(null, true); // Allow non-browser requests
+  if (allowedOrigins.includes(origin)) return callback(null, true);
+  // Allow any vercel.app subdomain for preview deployments
+  if (origin.endsWith('.vercel.app')) return callback(null, true);
+  callback(new Error('Not allowed by CORS'));
+};
+
 // Socket.io
 const io = new Server(server, {
   cors: {
-    origin: allowedOrigins,
+    origin: corsOriginCheck,
     methods: ['GET', 'POST'],
   },
 });
@@ -37,7 +50,7 @@ setupSocket(io);
 
 // Middleware
 app.use(cors({
-  origin: allowedOrigins,
+  origin: corsOriginCheck,
   credentials: true,
 }));
 app.use(express.json());
@@ -66,8 +79,9 @@ app.get('/api/health', (req, res) => {
 app.use(errorHandler);
 
 const PORT = process.env.PORT || 5000;
-server.listen(PORT, () => {
-  console.log(`🚀 Probo Server running on port ${PORT}`);
+const HOST = '0.0.0.0';
+server.listen(PORT, HOST, () => {
+  console.log(`🚀 Probo Server running on ${HOST}:${PORT}`);
   console.log(`📡 WebSocket server ready`);
 });
 
